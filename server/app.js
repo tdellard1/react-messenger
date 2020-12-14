@@ -9,8 +9,9 @@ const pingRouter = require("./routes/ping");
 
 const { json, urlencoded } = express;
 
-var app = express();
+const app = express();
 
+require('./mongoose')();
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
