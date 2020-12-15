@@ -1,8 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const auth = require('./auth');
+const misc = require('./misc');
 
-router.get("/welcome", function (req, res, next) {
-  res.status(200).send({ welcomeMessage: "Step 1 (completed)" });
-});
+
+router.post("/ping", misc.ping);
+
+router.get("/welcome", misc.welcome);
+
+router.post("/register", auth.registerUser);
 
 module.exports = router;
