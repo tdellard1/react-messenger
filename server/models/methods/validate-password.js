@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 
-module.exports = (password) => {
-    const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 128, 'sha256');
-    return this.hash === hash;
+module.exports = (password, salt, userHash) => {
+    const verifyHash = crypto
+        .pbkdf2Sync(password, salt, 10000, 512, 'sha512')
+        .toString('hex');
+    return userHash === verifyHash;
 };

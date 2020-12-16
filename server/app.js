@@ -10,7 +10,7 @@ const { json, urlencoded } = express;
 
 const app = express();
 
-require('./mongoose')();
+require('./loaders/mongoose')();
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));

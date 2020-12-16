@@ -1,29 +1,39 @@
 const User = require('../../models/User');
-
-const sendError = (response, statusCode, errorMessage) => {
-    response.status(statusCode).send({error: errorMessage})
-}
+const { validationResult } = require('express-validator');
 
 module.exports = {
     registerUser: async function (req, res) {
-        const {username, name, email, password} = req.body;
-
-        // validate request
-        if (!name || !email || !password) {
-            return sendError(res, 400, 'Missing Required Field')
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send({error: errors.array({onlyFirstError: true})});
         }
+
+        const {username, name, email, password} = req.body;
 
         // validate existing User
         const existingUser = await User.findOne({email});
         if (existingUser !== null) {
-            return sendError(res, 409, 'Account for email already exists');
+            return res.status(409).send({error: 'Account for email already exists'});
         }
-        
-        const newUser = new User({ username, name, email });
 
-        newUser.setPassword(password);
-        newUser.save().then(() => {
-            return res.status(201).send({user: newUser.toAuthJSON()});
+        const user = new User({ username, name, email });
+
+        user.setPassword(password);
+        user.save().then(() => {
+            return res.sendStatus(201);
         });
     },
+    loginUser: async function(req, res) {
+        const {username, password} = req.body;
+
+        User.findOne({username})
+            .then(user => {
+                if (user && user.validPassword(password, user.salt, user.hash)) {
+                    return res.status(200).send({user: user.toAuthJSON()});
+                } else {
+                    return res.status(400).send({error: 'Issue logging in'});
+                }
+            });
+
+    }
 }
