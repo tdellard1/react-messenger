@@ -18,10 +18,8 @@ module.exports = {
         if (existingUser !== null) {
             return sendError(res, 409, 'Account for email already exists');
         }
-
-        const newUser = new User({
-            username, name, email, password
-        });
+        
+        const newUser = new User({ username, name, email });
 
         newUser.setPassword(password);
         newUser.save().then(() => {
