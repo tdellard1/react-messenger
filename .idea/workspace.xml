@@ -6,25 +6,30 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-    </expand>
-    <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:backend-auth" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-    </select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="673a0dc4-7e7f-4c79-bb0f-4488bf4d5223" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/server/models/methods/generate-jwt.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/methods/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/methods/set-password.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/models/methods/validate-password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/routes/auth/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/Ping.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Ping.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/auth/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/auth/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/mongoose.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/mongoose.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/ping.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/misc/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/test/ping.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/test/ping.spec.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,13 +45,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="hiddenUrls">
-      <set>
-        <option value="https://github.com/tdellard1/Hatchways-Project.git" />
-      </set>
-    </option>
   </component>
   <component name="ProjectId" id="1lc7Mq208zaqNmz5bDa3UooVWYy" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -121,7 +119,7 @@
       <workItem from="1607893946353" duration="9895000" />
       <workItem from="1607958580987" duration="7052000" />
       <workItem from="1607980718868" duration="4495000" />
-      <workItem from="1608050743863" duration="18209000" />
+      <workItem from="1608050743863" duration="12037000" />
     </task>
     <servers />
   </component>
@@ -133,24 +131,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="CUSTOM_BOOLEAN_PROPERTIES">
-                <map>
-                  <entry key="Show.Git.Branches" value="true" />
-                </map>
-              </option>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="backend-auth" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -165,10 +146,6 @@
       <screen x="-448" y="-1057" width="1920" height="1057" />
     </state>
     <state x="-135" y="-806" key="#com.intellij.execution.impl.EditConfigurationsDialog/-448.-1057.1920.1057/0.23.1680.947@-448.-1057.1920.1057" timestamp="1607885079928" />
-    <state x="-348" y="-955" width="1720" height="855" key="DiffContextDialog" timestamp="1608070952003">
-      <screen x="-448" y="-1055" width="1920" height="1055" />
-    </state>
-    <state x="-348" y="-955" width="1720" height="855" key="DiffContextDialog/-448.-1055.1920.1055/0.25.1680.942@-448.-1055.1920.1055" timestamp="1608070952003" />
     <state width="1659" height="342" key="GridCell.Tab.0.bottom" timestamp="1607910831031">
       <screen x="-448" y="-1055" width="1920" height="1055" />
     </state>
@@ -249,11 +226,10 @@
       <screen x="-448" y="-1055" width="1920" height="1055" />
     </state>
     <state width="1659" height="342" key="GridCell.Tab.3.right/-448.-1055.1920.1055/0.25.1680.945@-448.-1055.1920.1055" timestamp="1607910831034" />
-    <state x="237" y="-825" width="597" height="548" key="find.popup" timestamp="1608071284351">
+    <state x="237" y="-825" width="597" height="548" key="find.popup" timestamp="1607981903083">
       <screen x="-448" y="-1055" width="1920" height="1055" />
     </state>
     <state x="237" y="-825" width="597" height="548" key="find.popup/-448.-1055.1920.1055/0.25.1680.940@-448.-1055.1920.1055" timestamp="1607981903083" />
-    <state x="237" y="-825" width="597" height="548" key="find.popup/-448.-1055.1920.1055/0.25.1680.942@-448.-1055.1920.1055" timestamp="1608071284351" />
     <state x="177" y="-821" width="670" height="676" key="search.everywhere.popup" timestamp="1608064868072">
       <screen x="-448" y="-1055" width="1920" height="1055" />
     </state>
