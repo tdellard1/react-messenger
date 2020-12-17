@@ -20,7 +20,7 @@ module.exports = {
 
         user.setPassword(password);
         user.save().then(() => {
-            return res.sendStatus(201).send({user: user.toAuthJSON()});
+            return res.status(201).send({user: user.toAuthJSON()});
         });
     },
     loginUser: async function(req, res) {

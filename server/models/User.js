@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const crypto = require('crypto');
 const { setPassword, validPassword, toAuthJSON } = require('./methods/index');
 const userSchema = new mongoose.Schema({
     username: String,
