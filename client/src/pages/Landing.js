@@ -6,9 +6,9 @@ import { Route, Link } from "react-router-dom";
 
 import Ping from "./Ping";
 
-const landinPageStyle = theme => ({
+const landingPageStyle = theme => ({
   landingContainer: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 });
 
@@ -68,4 +68,4 @@ class LandingPage extends Component {
   }
 }
 
-export default withStyles(landinPageStyle)(LandingPage);
+export default withStyles(landingPageStyle)(LandingPage);
