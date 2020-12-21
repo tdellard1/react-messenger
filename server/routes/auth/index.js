@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 
 module.exports = {
     registerUser: async function (req, res) {
+        console.log('request: ', req.body);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).send({error: errors.array({onlyFirstError: true})});
@@ -24,9 +25,9 @@ module.exports = {
         });
     },
     loginUser: async function(req, res) {
-        const {username, password} = req.body;
+        const {email, password} = req.body;
 
-        User.findOne({username})
+        User.findOne({email})
             .then(user => {
                 if (user && user.validPassword(password, user.salt, user.hash)) {
                     return res.status(200).send({user: user.toAuthJSON()});

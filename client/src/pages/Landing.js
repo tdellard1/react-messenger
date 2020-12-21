@@ -1,22 +1,35 @@
 import React, { Component } from "react";
 
-import { Typography } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 
 import Ping from "./Ping";
 
-const landinPageStyle = theme => ({
+const landingPageStyle = theme => ({
   landingContainer: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 });
 
 class LandingPage extends Component {
+  constructor(props){
+    super(props);
+    this.logOut = this.logOut.bind(this);
+  }
+
+
   state = {
     welcomeMessage: "Step 1: Run the server and refresh (not running)",
     step: 0
   };
+
+  logOut() {
+    localStorage.removeItem('user');
+    const { history, setAuthentication } = this.props;
+    setAuthentication(false);
+    history.push("/login");
+  }
 
   componentDidMount() {
     fetch("/welcome")
@@ -63,9 +76,14 @@ class LandingPage extends Component {
         {this.state.step >= 3 && (
           <Typography>All done! Now go make a pull request!</Typography>
         )}
+        <Button variant="contained"
+                color="primary"
+                onClick={this.logOut}>
+          Log Out
+        </Button>
       </div>
     );
   }
 }
 
-export default withStyles(landinPageStyle)(LandingPage);
+export default withStyles(landingPageStyle)(withRouter(LandingPage));
