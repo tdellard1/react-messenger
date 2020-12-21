@@ -15,7 +15,7 @@ function App() {
 
     function ProtectedRoutes({children}) {
         return isAuthenticated ? (children) :
-            (<Redirect to="/login"/>)
+            (<Redirect to="/signup"/>)
     }
 
     return (
