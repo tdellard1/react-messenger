@@ -1,18 +1,12 @@
-import { TextField, Button, Link } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import React, {useState} from "react";
-import {useAppContext} from "../../libs/contextLib";
 import {useHistory} from "react-router-dom";
+import './LogIn.css';
 
-function LogInPage() {
+function LogInPage({ setAuthentication }) {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { userHasAuthenticated } = useAppContext();
-
-    const loginContainer = {
-        display: 'flex',
-        flexDirection: 'column'
-    };
 
     function logInUser(event) {
         event.preventDefault();
@@ -32,31 +26,32 @@ function LogInPage() {
             })
             .then(response => {
                 localStorage.setItem('user', JSON.stringify(response.user));
-                userHasAuthenticated(true);
+                setAuthentication(true);
                 history.push("/");
-            })
-
+            });
     }
 
-    function routeToSignUp() {
+    function navigateToSignUp() {
         history.push("/signup");
     }
 
     return (
-        <form style={loginContainer} onSubmit={logInUser}>
-            <TextField label='Email'
-                       onChange={(e) => setEmail(e.target.value)}/>
-            <TextField label='Password'
-                       onChange={(e) => setPassword(e.target.value)}/>
+        <div className="LogIn">
+            <form onSubmit={logInUser}>
+                <TextField label='Email'
+                           onChange={(e) => setEmail(e.target.value)}/>
+                <TextField label='Password'
+                           onChange={(e) => setPassword(e.target.value)}/>
 
-            <Button variant="contained"
-                    type="type"
-                    color="primary">LogIn</Button>
-            <p>or</p>
-            <Button variant="contained" onClick={routeToSignUp}>
-                Sign Up
-            </Button>
-        </form>
+                <Button variant="contained"
+                        type="type"
+                        color="primary">LogIn</Button>
+                <p>or</p>
+                <Button variant="contained" onClick={navigateToSignUp}>
+                    Sign Up
+                </Button>
+            </form>
+        </div>
     );
 }
 
