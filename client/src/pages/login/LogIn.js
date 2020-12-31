@@ -1,21 +1,26 @@
-import { TextField, Button } from '@material-ui/core';
+import {TextField, Button} from '@material-ui/core';
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import './LogIn.css';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from '@material-ui/lab/Alert';
 
-function LogInPage({ setAuthentication }) {
-    const EMAIL_PATTERN = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />
+}
+
+function LogInPage({setAuthentication}) {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorObject, setErrorObject] = useState({});
+    const [open, setOpen] = useState("");
 
     function logInUser(event) {
         event.preventDefault();
 
         const requestOptions = {
             method: "POST",
-            headers: { 'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 email: email,
                 password: password
@@ -23,16 +28,26 @@ function LogInPage({ setAuthentication }) {
         };
 
         fetch("login", requestOptions)
+            .then(response => response.json())
             .then(response => {
-                if (response.status === 200) return response.json()
-                else throw Error("Issue with request");
-            })
-            .then(response => {
-                localStorage.setItem('user', JSON.stringify(response.user));
-                setAuthentication(true);
-                history.push("/");
+                if (response.user) {
+                    setAuthentication(response.user);
+                    history.push("/");
+                } else if (response.error) {
+                    setOpen(response.error[0].msg);
+                } else {
+                    console.log("Other issue: ", response)
+                }
             });
     }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
 
     function navigateToSignUp() {
         history.push("/signup");
@@ -40,24 +55,40 @@ function LogInPage({ setAuthentication }) {
 
     return (
         <div className="LogIn">
-            <form onSubmit={logInUser}>
+            <Snackbar open={!!open}
+                      onClose={handleClose}
+                      autoHideDuration={3000}>
+                <Alert severity="error">
+                    {open}
+                </Alert>
+            </Snackbar>
+            <div className="sign-up">
+                <small className="sign-up__text">Don't have an account?</small>
+                <Button variant="contained"
+                        className="sign-up__button"
+                        onClick={navigateToSignUp}>Create account</Button>
+            </div>
+
+            <form onSubmit={logInUser}
+                  className="login">
+                <h3 className="login__welcome">Welcome Back!</h3>
                 <TextField required
-                           label='Email'
+                           fullWidth={true}
+                           className="login__email"
+                           id="standard-basic"
+                           label='Email Address'
                            type="email"
                            onChange={(e) => setEmail(e.target.value)}/>
                 <TextField required
+                           fullWidth={true}
+                           className="login__password"
                            label='Password'
                            type="password"
                            onChange={(e) => setPassword(e.target.value)}/>
-
-                <Button required
-                        variant="contained"
+                <Button variant="contained"
+                        className="login__button"
                         type="password"
-                        color="primary">LogIn</Button>
-                <p>or</p>
-                <Button variant="contained" onClick={navigateToSignUp}>
-                    Sign Up
-                </Button>
+                        color="primary">Login</Button>
             </form>
         </div>
     );

@@ -1,4 +1,63 @@
-form {
+.SignUp {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    /*align-items: center;*/
 }
+
+.SignUp_login {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 2rem;
+}
+
+.SignUp_login__text {
+    opacity: 0.5;
+}
+
+.SignUp_login__button {
+    background-color: white;
+}
+
+.SignUp_login__button .MuiButton-label {
+    color: #3A8DFF;
+    margin: .5rem 1rem;
+}
+
+.SignUp_login__button {
+    background-color: white !important;
+    margin-left: 2rem !important;
+}
+
+.SignUp__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    margin: 0 20%;
+}
+
+.SignUp__create {
+    align-self: flex-start;
+    font-weight: 600;
+}
+
+.SignUp__username,
+.SignUp__email,
+.SignUp__password {
+    margin-bottom: 1.5rem !important;
+}
+
+.SignUp__confirmPass {
+    margin-bottom: 4rem !important;
+}
+
+.SignUp__button .MuiButton-label {
+    margin: .5rem 2rem;
+}
+
+/*.MuiButton-label {*/
+/*    text-transform: none;*/
+/*}*/
