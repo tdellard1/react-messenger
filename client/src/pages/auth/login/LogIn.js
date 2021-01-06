@@ -1,15 +1,16 @@
 import {TextField, Button} from '@material-ui/core';
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
-import './LogIn.css';
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from '@material-ui/lab/Alert';
+import useStyles from "../AuthCSS";
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
 function LogInPage({setAuthentication}) {
+    const { root, otherAuth, otherAuth_text, otherAuth_button, form, greeting, formFields, lastField, button } = useStyles();
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -54,7 +55,7 @@ function LogInPage({setAuthentication}) {
     }
 
     return (
-        <div className="LogIn">
+        <div className={root}>
             <Snackbar open={!!open}
                       onClose={handleClose}
                       autoHideDuration={3000}>
@@ -62,31 +63,30 @@ function LogInPage({setAuthentication}) {
                     {open}
                 </Alert>
             </Snackbar>
-            <div className="sign-up">
-                <small className="sign-up__text">Don't have an account?</small>
+            <div className={otherAuth}>
+                <small className={otherAuth_text}>Don't have an account?</small>
                 <Button variant="contained"
-                        className="sign-up__button"
+                        className={otherAuth_button}
                         onClick={navigateToSignUp}>Create account</Button>
             </div>
-
             <form onSubmit={logInUser}
-                  className="login">
-                <h3 className="login__welcome">Welcome Back!</h3>
+                  className={form}>
+                <h3 className={greeting}>Welcome Back!</h3>
                 <TextField required
                            fullWidth={true}
-                           className="login__email"
+                           className={formFields}
                            id="standard-basic"
                            label='Email Address'
                            type="email"
                            onChange={(e) => setEmail(e.target.value)}/>
                 <TextField required
                            fullWidth={true}
-                           className="login__password"
+                           className={lastField}
                            label='Password'
                            type="password"
                            onChange={(e) => setPassword(e.target.value)}/>
                 <Button variant="contained"
-                        className="login__button"
+                        className={button}
                         type="password"
                         color="primary">Login</Button>
             </form>

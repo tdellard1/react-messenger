@@ -1,7 +1,7 @@
 import React from 'react';
 import {useHistory} from "react-router-dom";
 import {TextField, Button} from '@material-ui/core';
-import './SignUp.css';
+import useStyles from "../AuthCSS";
 import FormValidation from './services/formValidation';
 import signUpValidation from "./services/sign-up-validation";
 
@@ -13,6 +13,7 @@ const INITIAL_STATE  = {
 };
 
 function SignUpPage({setAuthentication}) {
+    const { root, otherAuth, otherAuth_text, otherAuth_button, form, greeting, formFields, button } = useStyles();
     const history = useHistory();
     const {handleChange, handleSubmit, handleBlur, errors} =
         FormValidation(INITIAL_STATE, signUpValidation, signUpCallback);
@@ -27,35 +28,35 @@ function SignUpPage({setAuthentication}) {
     }
 
     return (
-        <div className="SignUp">
-            <div className="SignUp_login">
-                <small className="SignUp_login__text">Already have an account?</small>
+        <div className={root}>
+            <div className={otherAuth}>
+                <small className={otherAuth_text}>Already have an account?</small>
                 <Button variant="contained"
-                        className="SignUp_login__button"
+                        className={otherAuth_button}
                         onClick={navigateToLogin}>Login</Button>
             </div>
             <form onSubmit={handleSubmit}
-                  className="SignUp__form">
-                <h3 className="SignUp__create">Create an account.</h3>
+                  className={form}>
+                <h3 className={greeting}>Create an account.</h3>
                 <TextField required
                            fullWidth={true}
                            label='Username'
                            name="username"
-                           className="SignUp__username"
+                           className={formFields}
                            onChange={handleChange}/>
                 <TextField required
                            fullWidth={true}
                            type="email"
                            label='Email'
                            name="email"
-                           className="SignUp__email"
+                           className={formFields}
                            onChange={handleChange}/>
                 <TextField required
                            fullWidth={true}
                            type="password"
                            label='Password'
                            name="password"
-                           className="SignUp__password"
+                           className={formFields}
                            error={!!errors.password}
                            helperText={errors.password}
                            onBlur={handleBlur}
@@ -65,14 +66,14 @@ function SignUpPage({setAuthentication}) {
                            type="password"
                            label='Confirm Password'
                            name="confirmPass"
-                           className="SignUp__confirmPass"
+                           className={lastField}
                            error={!!errors.confirmPass}
                            helperText={errors.confirmPass}
                            onBlur={handleBlur}
                            onChange={handleChange}/>
 
                 <Button variant="contained"
-                        className="SignUp__button"
+                        className={button}
                         type="submit"
                         color="primary">Create</Button>
             </form>
