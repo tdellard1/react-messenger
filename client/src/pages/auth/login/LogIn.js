@@ -10,7 +10,7 @@ function Alert(props) {
 }
 
 function LogInPage({setAuthentication}) {
-    const { root, otherAuth, otherAuth_text, otherAuth_button, form, greeting, formFields, lastField, button } = useStyles();
+    const classes = useStyles();
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -55,7 +55,7 @@ function LogInPage({setAuthentication}) {
     }
 
     return (
-        <div className={root}>
+        <div className={classes.root}>
             <Snackbar open={!!open}
                       onClose={handleClose}
                       autoHideDuration={3000}>
@@ -63,30 +63,30 @@ function LogInPage({setAuthentication}) {
                     {open}
                 </Alert>
             </Snackbar>
-            <div className={otherAuth}>
-                <small className={otherAuth_text}>Don't have an account?</small>
+            <div className={classes.otherAuth}>
+                <small className={classes.otherAuth_text}>Don't have an account?</small>
                 <Button variant="contained"
-                        className={otherAuth_button}
+                        className={classes.otherAuth_button}
                         onClick={navigateToSignUp}>Create account</Button>
             </div>
             <form onSubmit={logInUser}
-                  className={form}>
-                <h3 className={greeting}>Welcome Back!</h3>
+                  className={classes.form}>
+                <h3 className={classes.greeting}>Welcome Back!</h3>
                 <TextField required
                            fullWidth={true}
-                           className={formFields}
+                           className={classes.formFields}
                            id="standard-basic"
                            label='Email Address'
                            type="email"
                            onChange={(e) => setEmail(e.target.value)}/>
                 <TextField required
                            fullWidth={true}
-                           className={lastField}
+                           className={classes.lastField}
                            label='Password'
                            type="password"
                            onChange={(e) => setPassword(e.target.value)}/>
                 <Button variant="contained"
-                        className={button}
+                        className={classes.button}
                         type="password"
                         color="primary">Login</Button>
             </form>

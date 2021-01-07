@@ -13,7 +13,7 @@ const INITIAL_STATE  = {
 };
 
 function SignUpPage({setAuthentication}) {
-    const { root, otherAuth, otherAuth_text, otherAuth_button, form, greeting, formFields, button } = useStyles();
+    const classes = useStyles();
     const history = useHistory();
     const {handleChange, handleSubmit, handleBlur, errors} =
         FormValidation(INITIAL_STATE, signUpValidation, signUpCallback);
@@ -28,35 +28,35 @@ function SignUpPage({setAuthentication}) {
     }
 
     return (
-        <div className={root}>
-            <div className={otherAuth}>
-                <small className={otherAuth_text}>Already have an account?</small>
+        <div className={classes.root}>
+            <div className={classes.otherAuth}>
+                <small className={classes.otherAuth_text}>Already have an account?</small>
                 <Button variant="contained"
-                        className={otherAuth_button}
+                        className={classes.otherAuth_button}
                         onClick={navigateToLogin}>Login</Button>
             </div>
             <form onSubmit={handleSubmit}
-                  className={form}>
-                <h3 className={greeting}>Create an account.</h3>
+                  className={classes.form}>
+                <h3 className={classes.greeting}>Create an account.</h3>
                 <TextField required
                            fullWidth={true}
                            label='Username'
                            name="username"
-                           className={formFields}
+                           className={classes.formFields}
                            onChange={handleChange}/>
                 <TextField required
                            fullWidth={true}
                            type="email"
                            label='Email'
                            name="email"
-                           className={formFields}
+                           className={classes.formFields}
                            onChange={handleChange}/>
                 <TextField required
                            fullWidth={true}
                            type="password"
                            label='Password'
                            name="password"
-                           className={formFields}
+                           className={classes.formFields}
                            error={!!errors.password}
                            helperText={errors.password}
                            onBlur={handleBlur}
@@ -66,14 +66,14 @@ function SignUpPage({setAuthentication}) {
                            type="password"
                            label='Confirm Password'
                            name="confirmPass"
-                           className={lastField}
+                           className={classes.lastField}
                            error={!!errors.confirmPass}
                            helperText={errors.confirmPass}
                            onBlur={handleBlur}
                            onChange={handleChange}/>
 
                 <Button variant="contained"
-                        className={button}
+                        className={classes.button}
                         type="submit"
                         color="primary">Create</Button>
             </form>

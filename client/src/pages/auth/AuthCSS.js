@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         width: "auto",
         margin: "0 20%"
     },
-    create: {
+    greeting: {
         alignSelf: "flex-start",
         fontWeight: 600
     },

@@ -5,8 +5,8 @@ import useLocalAuth from "./libs/local-auth";
 
 import {theme} from "./themes/theme";
 import LandingPage from "./pages/Landing";
-import SignUpPage from "./pages/signup/SignUp";
-import LogInPage from "./pages/login/LogIn";
+import SignUpPage from "./pages/auth/signup/SignUp";
+import LogInPage from "./pages/auth/login/LogIn";
 import backGround from "./images/bg-img.png";
 
 import "./App.css";
@@ -52,29 +52,6 @@ function App() {
             </Router>
         </MuiThemeProvider>
     );
-
-    /*
-    return (
-         <MuiThemeProvider theme={theme}>
-             <Router>
-                 <img src={backGround} alt="background"/>
-                 <Switch>
-                     <Route path="/signup">
-                         {!!authentication ? <Redirect to="/"/> : <SignUpPage setAuthentication={setAuthentication}/>}
-                     </Route>
-                     <Route path="/login">
-                         {!!authentication ? <Redirect to="/"/> : <LogInPage setAuthentication={setAuthentication}/>}
-                     </Route>
-                     <Route exact path="/">
-                         <ProtectedRoutes>
-                             <LandingPage setAuthentication={setAuthentication}/>
-                         </ProtectedRoutes>
-                     </Route>
-                 </Switch>
-             </Router>
-         </MuiThemeProvider>
-     );
-     */
 }
 
 export default App;
