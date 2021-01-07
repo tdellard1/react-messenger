@@ -1,37 +1,52 @@
-import React, {useState} from "react";
+import React from "react";
 import {MuiThemeProvider} from "@material-ui/core";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import {authenticationStatus} from "./libs/authentication-status";
+import useLocalAuth from "./libs/local-auth";
 
 import {theme} from "./themes/theme";
 import LandingPage from "./pages/Landing";
-import SignUpPage from "./pages/signup/SignUp";
-import LogInPage from "./pages/login/LogIn";
+import SignUpPage from "./pages/auth/signup/SignUp";
+import LogInPage from "./pages/auth/login/LogIn";
+import backGround from "./images/bg-img.png";
 
 import "./App.css";
 
 function App() {
-    const [isAuthenticated, setAuthentication] = useState(authenticationStatus);
+    const [authentication, setAuthentication] = useLocalAuth();
 
     function ProtectedRoutes({children}) {
-        return isAuthenticated ? (children) :
+        return !!authentication ? (children) :
             (<Redirect to="/signup"/>)
+    }
+
+    function AuthBackground({children}) {
+        return (
+            <div className="auth-container">
+                <div className="signUpBackground">
+                    <img src={backGround} alt="background"/>
+                </div>
+                {children}
+            </div>);
     }
 
     return (
         <MuiThemeProvider theme={theme}>
             <Router>
                 <Switch>
-                    <Route path="/signup">
-                        {isAuthenticated ? <Redirect to="/"/> : <SignUpPage setAuthentication={setAuthentication}/>}
-                    </Route>
-                    <Route path="/login">
-                        {isAuthenticated ? <Redirect to="/"/> : <LogInPage setAuthentication={setAuthentication}/>}
-                    </Route>
                     <Route exact path="/">
                         <ProtectedRoutes>
                             <LandingPage setAuthentication={setAuthentication}/>
                         </ProtectedRoutes>
+                    </Route>
+                    <Route path="/signup">
+                        <AuthBackground>
+                            <SignUpPage setAuthentication={setAuthentication}/>
+                        </AuthBackground>
+                    </Route>
+                    <Route path="/login">
+                        <AuthBackground>
+                            <LogInPage setAuthentication={setAuthentication}/>
+                        </AuthBackground>
                     </Route>
                 </Switch>
             </Router>

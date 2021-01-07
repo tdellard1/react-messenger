@@ -10,15 +10,16 @@ router.post("/ping", misc.ping);
 router.get("/welcome", misc.welcome);
 
 router.post("/register",
-    body("password").isLength({min: 6}),
-    body("username").exists(),
-    body("username").isLength({min: 1}),
-    body("email").isEmail(),
+    body("email").isEmail().withMessage("Not a valid Email Address"),
+    body("username").exists().withMessage("Please supply a username"),
+    body("password")
+        .isLength({min: 6})
+        .withMessage("Password is not long enough"),
     auth.registerUser);
 
 router.post("/login",
-    body("password").isLength({min: 6}),
-    body("username").exists(),
+    body("email").isEmail().withMessage("Not a valid Email Address"),
+    body("password").exists().withMessage("Please supply a password"),
     auth.loginUser);
 
 module.exports = router;

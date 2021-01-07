@@ -34,7 +34,6 @@ class LandingPage extends Component {
   componentDidMount() {
     fetch("/welcome")
       .then(res => {
-        console.log(res);
         if (res.status === 200) return res.json();
         else throw Error("Couldn't connect to the server");
       })
