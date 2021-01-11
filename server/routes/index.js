@@ -2,7 +2,11 @@ const { body } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const auth = require("./auth");
+const authMiddleware = require("./auth/middleware");
 const misc = require("./misc");
+const users = require("./users");
+const messages = require("./messages");
+const conversations = require("./conversations");
 
 
 router.post("/ping", misc.ping);
@@ -21,5 +25,9 @@ router.post("/login",
     body("email").isEmail().withMessage("Not a valid Email Address"),
     body("password").exists().withMessage("Please supply a password"),
     auth.loginUser);
+
+router.use("/users", authMiddleware, users);
+router.use("/messages", authMiddleware, messages);
+router.use("/conversations", authMiddleware, conversations);
 
 module.exports = router;
