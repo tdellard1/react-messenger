@@ -9,6 +9,9 @@ const conversationSchema = new mongoose.Schema({
     },
     messages: {
         type: [Message]
+    },
+    lastMessage: {
+        type: Message
     }
 });
 
