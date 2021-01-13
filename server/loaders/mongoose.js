@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const MONGO_URI = process.env.MONGO_URL + process.env.DATABASE_NAME;
 const connectionOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 };
 
 async function connect() {
