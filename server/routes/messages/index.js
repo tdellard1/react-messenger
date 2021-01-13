@@ -1,18 +1,14 @@
 const router = require('express').Router();
+const Conversation = require('../../models/Conversation');
 const Message = require('../../models/Message');
 const User = require('../../models/User');
 
-router.post("/", async function (req, res) {
-    const existingUser = await User.findOne({email: "cartelkeys@gmail.com"});
-    const message = new Message({
-        sender: existingUser,
-        content: "Hello There",
-        conversation: {}
-    });
+router.get("/:conversationId", async function (req, res) {
+    const {conversationId} = req.params;
 
-    message.save().then(() => {
-        return res.status(201).send({message: "Hello World!"});
-    });
+    const conversation = await Conversation.findOne({_id: conversationId}).exec();
+
+    return res.status(200).send({conversation});
 });
 
 module.exports = router;

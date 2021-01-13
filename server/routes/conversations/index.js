@@ -39,13 +39,20 @@ router.post("/", async function (request, response) {
     }
 });
 
+// Gets All Conversations For One User
 router.get("/:userId", async function (request, response) {
     const {userId} = request.params;
     const user = await User.findOne({_id: userId}).exec();
 
-    const allConversations = await Conversation.find({
+    const conversations = await Conversation.find({
         participants: {$in: user}
     }).exec();
+
+    const allConversations = conversations.map(({_id, participants, messages}) => ({
+        _id,
+        participants,
+        messages: messages[messages.length - 1]
+    }));
 
     return response.status(200).send({
         conversations: allConversations,
@@ -55,7 +62,7 @@ router.get("/:userId", async function (request, response) {
 
 router.post("/:conversationId", async function (request, response) {
     const {conversationId} = request.params;
-    const {recipientIds, content} = request.body;
+    const {content} = request.body;
     const sender = await getUserFromRequest(request, User);
     const timeStamp = Math.floor(Date.now() / 1000);
 
@@ -63,31 +70,10 @@ router.post("/:conversationId", async function (request, response) {
         sender, content, timeStamp
     });
 
-
     if (conversationId) {
         await Conversation.findOneAndUpdate({
             "_id": conversationId
         }, {$push: {messages: message}}).exec();
-    } else {
-        await Conversation.findOneAndUpdate({
-            "participants._id": {$in: [sender._id, ...recipientIds]}
-        }, {$push: {messages: message}}).exec();
-
-
-
-
-        const recipients = await User.find({
-            _id: {$in: recipientIds}
-        }).exec();
-
-        const participants = [sender, ...recipients];
-        const newConversion = new Conversation({
-            participants: participants, message: message
-        });
-
-        newConversion.save().then(conversion => {
-            return response.status(201).send({status: "finished"});
-        })
     }
 
     return response.status(201).send({status: "finished"});

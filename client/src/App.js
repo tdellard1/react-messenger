@@ -4,7 +4,7 @@ import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom
 import useLocalAuth from "./libs/local-auth";
 
 import {theme} from "./themes/theme";
-import LandingPage from "./pages/Landing";
+import Messenger from "./pages/Messenger";
 import SignUpPage from "./pages/auth/signup/SignUp";
 import LogInPage from "./pages/auth/login/LogIn";
 import backGround from "./images/bg-img.png";
@@ -35,7 +35,7 @@ function App() {
                 <Switch>
                     <Route exact path="/">
                         <ProtectedRoutes>
-                            <LandingPage setAuthentication={setAuthentication}/>
+                            <Messenger setAuthentication={setAuthentication} user={authentication}/>
                         </ProtectedRoutes>
                     </Route>
                     <Route path="/signup">
