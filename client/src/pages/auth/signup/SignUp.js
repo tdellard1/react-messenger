@@ -4,6 +4,7 @@ import {TextField, Button} from '@material-ui/core';
 import useStyles from "../AuthCSS";
 import FormValidation from './services/formValidation';
 import signUpValidation from "./services/sign-up-validation";
+import {useAuthorization} from "../../../contexts/AuthorizationProvider";
 
 const INITIAL_STATE  = {
     username: "",
@@ -12,7 +13,8 @@ const INITIAL_STATE  = {
     confirmPass: ""
 };
 
-function SignUpPage({setAuthentication}) {
+function SignUpPage() {
+    const {setAuthentication} = useAuthorization();
     const classes = useStyles();
     const history = useHistory();
     const {handleChange, handleSubmit, handleBlur, errors} =

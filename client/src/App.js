@@ -1,20 +1,22 @@
 import React from "react";
 import {MuiThemeProvider} from "@material-ui/core";
 import {BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
-import useLocalAuth from "./libs/local-auth";
 
 import {theme} from "./themes/theme";
-import Messenger from "./pages/Messenger";
+import Messenger from "./pages/messenger/Messenger";
 import SignUpPage from "./pages/auth/signup/SignUp";
 import LogInPage from "./pages/auth/login/LogIn";
 import backGround from "./images/bg-img.png";
 
+import {ConversationProvider} from "./contexts/ConversationProvider";
+import {AuthorizationProvider, useAuthorization} from "./contexts/AuthorizationProvider";
+
 import "./App.css";
 
 function App() {
-    const [authentication, setAuthentication] = useLocalAuth();
 
     function ProtectedRoutes({children}) {
+        const {authentication} = useAuthorization();
         return !!authentication ? (children) :
             (<Redirect to="/signup"/>)
     }
@@ -31,25 +33,29 @@ function App() {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        <ProtectedRoutes>
-                            <Messenger setAuthentication={setAuthentication} user={authentication}/>
-                        </ProtectedRoutes>
-                    </Route>
-                    <Route path="/signup">
-                        <AuthBackground>
-                            <SignUpPage setAuthentication={setAuthentication}/>
-                        </AuthBackground>
-                    </Route>
-                    <Route path="/login">
-                        <AuthBackground>
-                            <LogInPage setAuthentication={setAuthentication}/>
-                        </AuthBackground>
-                    </Route>
-                </Switch>
-            </Router>
+            <AuthorizationProvider>
+                <Router>
+                    <Switch>
+                        <Route exact path="/">
+                            <ProtectedRoutes>
+                                <ConversationProvider>
+                                    <Messenger />
+                                </ConversationProvider>
+                            </ProtectedRoutes>
+                        </Route>
+                        <Route path="/signup">
+                            <AuthBackground>
+                                <SignUpPage />
+                            </AuthBackground>
+                        </Route>
+                        <Route path="/login">
+                            <AuthBackground>
+                                <LogInPage />
+                            </AuthBackground>
+                        </Route>
+                    </Switch>
+                </Router>
+            </AuthorizationProvider>
         </MuiThemeProvider>
     );
 }
