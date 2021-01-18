@@ -10,6 +10,7 @@ module.exports = {
             username: this.username,
             email: this.email,
             name: this.name,
+            id: this._id,
             token: generateJWT(this)
         }
     }

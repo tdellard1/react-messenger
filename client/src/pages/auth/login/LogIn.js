@@ -4,12 +4,14 @@ import {useHistory} from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from '@material-ui/lab/Alert';
 import useStyles from "../AuthCSS";
+import {useAuthorization} from "../../../contexts/AuthorizationProvider";
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
-function LogInPage({setAuthentication}) {
+function LogInPage() {
+    const {setAuthentication} = useAuthorization();
     const classes = useStyles();
     const history = useHistory();
     const [email, setEmail] = useState('');
