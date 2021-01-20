@@ -9,6 +9,7 @@ import LogInPage from "./pages/auth/login/LogIn";
 import backGround from "./images/bg-img.png";
 
 import {ConversationProvider} from "./contexts/ConversationProvider";
+import {SocketProvider} from "./contexts/SocketProvider";
 import {AuthorizationProvider, useAuthorization} from "./contexts/AuthorizationProvider";
 
 import "./App.css";
@@ -34,27 +35,29 @@ function App() {
     return (
         <MuiThemeProvider theme={theme}>
             <AuthorizationProvider>
-                <Router>
-                    <Switch>
-                        <Route exact path="/">
-                            <ProtectedRoutes>
-                                <ConversationProvider>
-                                    <Messenger />
-                                </ConversationProvider>
-                            </ProtectedRoutes>
-                        </Route>
-                        <Route path="/signup">
-                            <AuthBackground>
-                                <SignUpPage />
-                            </AuthBackground>
-                        </Route>
-                        <Route path="/login">
-                            <AuthBackground>
-                                <LogInPage />
-                            </AuthBackground>
-                        </Route>
-                    </Switch>
-                </Router>
+                <SocketProvider>
+                    <Router>
+                        <Switch>
+                            <Route exact path="/">
+                                <ProtectedRoutes>
+                                    <ConversationProvider>
+                                        <Messenger/>
+                                    </ConversationProvider>
+                                </ProtectedRoutes>
+                            </Route>
+                            <Route path="/signup">
+                                <AuthBackground>
+                                    <SignUpPage/>
+                                </AuthBackground>
+                            </Route>
+                            <Route path="/login">
+                                <AuthBackground>
+                                    <LogInPage/>
+                                </AuthBackground>
+                            </Route>
+                        </Switch>
+                    </Router>
+                </SocketProvider>
             </AuthorizationProvider>
         </MuiThemeProvider>
     );

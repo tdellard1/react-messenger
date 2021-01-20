@@ -9,7 +9,7 @@ import {useConversations} from "../../../../contexts/ConversationProvider";
 
 export default function UserMenu() {
     const history = useHistory();
-    const {removeUser} = useAuthorization();
+    const {setAuthentication} = useAuthorization();
     const [anchorEl, setAnchorEl] = useState();
     const {openModal} = useConversations();
 
@@ -18,7 +18,7 @@ export default function UserMenu() {
     }
 
     function logOut() {
-        removeUser();
+        setAuthentication(false);
         history.push("/login");
     }
 

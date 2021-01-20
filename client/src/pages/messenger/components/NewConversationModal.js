@@ -18,7 +18,7 @@ export default function NewConversationModal() {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [firstMessage, setFirstMessage] = useState("");
     const {authentication, allUsers} = useAuthorization();
-    const {conversationModal, setConversationModal, closeModal} = useConversations();
+    const {conversationModal, setConversationModal, closeModal, setSelectedConversation, fetchAllConversations} = useConversations();
 
     const startNewConversation = () => {
             const requestOptions = {
@@ -36,7 +36,8 @@ export default function NewConversationModal() {
             fetch('conversations', requestOptions)
                 .then(r => r.json())
                 .then(response => {
-                    console.log(response);
+                    setSelectedConversation(response.conversation);
+                    fetchAllConversations();
                     closeModal();
                 });
     }

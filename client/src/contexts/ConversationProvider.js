@@ -1,6 +1,8 @@
-import React, {createContext, useContext, useEffect, useRef, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {useAuthorization} from "./AuthorizationProvider";
 import useConversationModalState from "../pages/messenger/state/NewConversationState";
+import {useSocket} from "./SocketProvider";
+
 const ConversationContext = createContext({});
 
 export function useConversations() {
@@ -8,19 +10,19 @@ export function useConversations() {
 }
 
 export function ConversationProvider({children}) {
+    const {socket} = useSocket();
     const {authentication} = useAuthorization();
 
-    const isFirstRun = useRef(true);
     const [sendMessage, setSendMessage] = useState("");
     const [conversations, setConversations] = useState([]);
     const [selectedConversation, setSelectedConversation] = useState({});
     const [conversationModal, setConversationModal] = useConversationModalState();
 
+    // Adds message to the conversation through the server and then updates conversation when successful.
     useEffect(() => {
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
-        }
+        console.log('useEffect for sendMessage');
+        if (sendMessage === "") return;
+
         const requestOptions = {
             method: "POST",
             headers: {
@@ -35,12 +37,36 @@ export function ConversationProvider({children}) {
         fetch(`conversations/${selectedConversation._id}`, requestOptions)
             .then(r => r.json())
             .then(res => {
-                console.log('res: ', res);
-                // setSelectedConversation(res.conversation);
+                socket.emit('send-message', res.conversation);
+                setSelectedConversation(res.conversation);
             });
-    }, [sendMessage])
+    }, [sendMessage, authentication.token, selectedConversation._id, socket])
+
+    // Add Socket Listener For Updated Conversations
+    useEffect(() => {
+        if (socket.connected) {
+            socket.on('update-conversation', (conversation) => {
+                setSelectedConversation(conversation);
+            });
+
+            socket.on('update-conversations', () => {
+                fetchAllConversations();
+            });
+            return () => {};
+        }
+    }, [socket])
+
+    // Join Socket Rooms When All Conversations Are Retrieved
+    useEffect(() => {
+        if (!socket.connected) return;
+        socket.emit('join-rooms', conversations.map(conversation => conversation._id));
+    }, [conversations, socket]);
 
     useEffect(() => {
+        fetchAllConversations();
+    }, []);
+
+    function fetchAllConversations() {
         const requestOptions = {
             method: "GET",
             headers: {
@@ -54,7 +80,7 @@ export function ConversationProvider({children}) {
             .then(res => {
                 setConversations(res.conversations);
             });
-    }, []);
+    }
 
     function closeModal() {
         setConversationModal(false);
@@ -69,7 +95,9 @@ export function ConversationProvider({children}) {
         conversations, setConversations,
         conversationModal, setConversationModal,
         selectedConversation, setSelectedConversation,
-        openModal, closeModal}
+        fetchAllConversations,
+        openModal, closeModal
+    }
 
     return (
         <ConversationContext.Provider value={providerValue}>

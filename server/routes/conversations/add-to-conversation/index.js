@@ -20,6 +20,8 @@ module.exports = async function (request, response) {
     }, {
         $push: {messages: message},
         lastMessage: message
+    }, {
+        new: true
     }).exec().then(conversation => {
         return response.status(201).send({conversation});
     });

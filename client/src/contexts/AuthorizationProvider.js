@@ -19,14 +19,8 @@ export function AuthorizationProvider({children}) {
         }
     }, [authentication]);
 
-    function removeUser() {
-        localStorage.removeItem('user');
-        setAuthentication(false);
-    }
-
     return (
         <AuthorizationContext.Provider value={{
-            removeUser,
             allUsers,
             setAllUsers,
             authentication,
