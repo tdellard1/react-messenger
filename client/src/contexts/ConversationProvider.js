@@ -1,6 +1,10 @@
-import React, {createContext, useContext, useEffect, useRef, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {useAuthorization} from "./AuthorizationProvider";
 import useConversationModalState from "../pages/messenger/state/NewConversationState";
+import {useSocket} from "./SocketProvider";
+import {useSelectedConversation} from "./conversation-states/selected-conversation";
+import {getOneConversation} from "../pages/messenger/services/getOneConversation";
+
 const ConversationContext = createContext({});
 
 export function useConversations() {
@@ -8,19 +12,18 @@ export function useConversations() {
 }
 
 export function ConversationProvider({children}) {
+    const {socket} = useSocket();
     const {authentication} = useAuthorization();
 
-    const isFirstRun = useRef(true);
     const [sendMessage, setSendMessage] = useState("");
-    const [conversations, setConversations] = useState([]);
-    const [selectedConversation, setSelectedConversation] = useState({});
+    const [allConversations, setAllConversations] = useState([]);
+    const [selectedConversation, setSelectedConversation] = useSelectedConversation();
     const [conversationModal, setConversationModal] = useConversationModalState();
 
+    // Adds message to the conversation through the server and then updates conversation when successful.
     useEffect(() => {
-        if (isFirstRun.current) {
-            isFirstRun.current = false;
-            return;
-        }
+        if (sendMessage === "") return;
+
         const requestOptions = {
             method: "POST",
             headers: {
@@ -35,12 +38,36 @@ export function ConversationProvider({children}) {
         fetch(`conversations/${selectedConversation._id}`, requestOptions)
             .then(r => r.json())
             .then(res => {
-                console.log('res: ', res);
-                // setSelectedConversation(res.conversation);
+                socket.emit('send-message', res.conversation);
+                setSelectedConversation(res.conversation);
             });
-    }, [sendMessage])
+    }, [sendMessage, socket])
+
+    // Add Socket Listener For Updated Conversations
+    useEffect(() => {
+        if (socket.connected) {
+            socket.on('update-conversation', (conversation) => {
+                setSelectedConversation(conversation);
+            });
+
+            socket.on('update-conversations', () => {
+                fetchAllConversations();
+            });
+            return () => {};
+        }
+    }, [socket])
+
+    // Join Socket Rooms When All Conversations Are Retrieved
+    useEffect(() => {
+        if (!socket.connected) return;
+        socket.emit('join-rooms', allConversations.map(conversation => conversation._id));
+    }, [allConversations, socket]);
 
     useEffect(() => {
+        fetchAllConversations();
+    }, []);
+
+    function fetchAllConversations() {
         const requestOptions = {
             method: "GET",
             headers: {
@@ -51,10 +78,15 @@ export function ConversationProvider({children}) {
 
         fetch(`conversations/${authentication.id}`, requestOptions)
             .then(r => r.json())
-            .then(res => {
-                setConversations(res.conversations);
+            .then(async ({conversations}) => {
+                if (conversations.length > 0) {
+                    const {_id} = conversations.reverse()[0];
+                    const conversation = await getOneConversation(_id, authentication);
+                    setSelectedConversation(conversation);
+                    setAllConversations(conversations.reverse());
+                }
             });
-    }, []);
+    }
 
     function closeModal() {
         setConversationModal(false);
@@ -66,10 +98,13 @@ export function ConversationProvider({children}) {
 
     const providerValue = {
         sendMessage, setSendMessage,
-        conversations, setConversations,
+        conversations: allConversations,
+        setConversations: setAllConversations,
         conversationModal, setConversationModal,
         selectedConversation, setSelectedConversation,
-        openModal, closeModal}
+        fetchAllConversations,
+        openModal, closeModal
+    }
 
     return (
         <ConversationContext.Provider value={providerValue}>

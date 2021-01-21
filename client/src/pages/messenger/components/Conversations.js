@@ -1,6 +1,6 @@
 import {Button, InputAdornment, TextField} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import React from "react";
+import React, {useEffect} from "react";
 import ConversationListItem from "./ConversationListItem";
 import {useConversations} from "../../../contexts/ConversationProvider";
 import {useAuthorization} from "../../../contexts/AuthorizationProvider";
@@ -12,7 +12,8 @@ import UserPanel from "./conversations/UserPanel";
 const useStyles = makeStyles({
     conversations: {
         backgroundColor: "#F5F7FB",
-        padding: "0 2rem"
+        padding: "0 2rem",
+        width: "33%"
     },
     searchField: {
         backgroundColor: "#E8EEFA"
@@ -50,13 +51,13 @@ export default function Conversations() {
                                </InputAdornment>
                            )
                        }}/>
-                       <div className={classes.listItem}>
-                           {Array.isArray(conversations) && conversations.map(conversation => (
-                               <ConversationListItem key={conversation._id}
-                                                     conversation={conversation}
-                                                     getConversation={() => getConversation(conversation)}/>
-                           ))}
-                       </div>
+            <div className={classes.listItem}>
+                {conversations && conversations.map(conversation => (
+                    <ConversationListItem key={conversation._id}
+                                          conversation={conversation}
+                                          getConversation={() => getConversation(conversation)}/>
+                ))}
+            </div>
 
         </div>
     );

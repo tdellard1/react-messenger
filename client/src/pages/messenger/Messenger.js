@@ -8,6 +8,9 @@ const useStyles = makeStyles({
         display: "flex",
         flexDirection: "row",
         height: "100vh"
+    },
+    oneThirdWidth: {
+        width: "33%"
     }
 });
 
@@ -16,7 +19,7 @@ function Messenger() {
 
     return (
         <div className={classes.root}>
-            <Conversations classes={classes} />
+            <Conversations />
             <OpenConversation />
         </div>
     );

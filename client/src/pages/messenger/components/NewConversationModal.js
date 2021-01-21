@@ -13,12 +13,14 @@ import {Button, TextField} from "@material-ui/core";
 import React, {useState} from "react";
 import {useAuthorization} from "../../../contexts/AuthorizationProvider";
 import {useConversations} from "../../../contexts/ConversationProvider";
+import {useSocket} from "../../../contexts/SocketProvider";
 
 export default function NewConversationModal() {
+    const {socket} = useSocket();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [firstMessage, setFirstMessage] = useState("");
     const {authentication, allUsers} = useAuthorization();
-    const {conversationModal, setConversationModal, closeModal} = useConversations();
+    const {conversationModal, setConversationModal, closeModal, setSelectedConversation, conversations, fetchAllConversations} = useConversations();
 
     const startNewConversation = () => {
             const requestOptions = {
@@ -36,7 +38,9 @@ export default function NewConversationModal() {
             fetch('conversations', requestOptions)
                 .then(r => r.json())
                 .then(response => {
-                    console.log(response);
+                    socket.emit('reload-conversations', allUsers[selectedIndex]._id);
+                    setSelectedConversation(response.conversation);
+                    fetchAllConversations();
                     closeModal();
                 });
     }
@@ -49,7 +53,13 @@ export default function NewConversationModal() {
             <DialogTitle>Start A New Conversation</DialogTitle>
             <DialogContent>
                 <List>
-                    {allUsers.map((user, index) => (
+                    {allUsers
+                        .filter(user  => {
+                            const participants2DArray = conversations.map((conversation) => (conversation.participants));
+                            const currentParticipants = [].concat.apply([], participants2DArray);
+                            return !currentParticipants.find(participant => participant._id === user._id);
+                        })
+                        .map((user, index) => (
                         <div key={index}>
                             <ListItem button
                                       selected={selectedIndex === index}
