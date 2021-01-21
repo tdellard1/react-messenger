@@ -18,7 +18,7 @@ export default function NewConversationModal() {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [firstMessage, setFirstMessage] = useState("");
     const {authentication, allUsers} = useAuthorization();
-    const {conversationModal, setConversationModal, closeModal, setSelectedConversation, fetchAllConversations} = useConversations();
+    const {conversationModal, setConversationModal, closeModal, setSelectedConversation, conversations, fetchAllConversations} = useConversations();
 
     const startNewConversation = () => {
             const requestOptions = {
@@ -50,7 +50,13 @@ export default function NewConversationModal() {
             <DialogTitle>Start A New Conversation</DialogTitle>
             <DialogContent>
                 <List>
-                    {allUsers.map((user, index) => (
+                    {allUsers
+                        .filter(user  => {
+                            const participants2DArray = conversations.map((conversation) => (conversation.participants));
+                            const currentParticipants = [].concat.apply([], participants2DArray);
+                            return !currentParticipants.find(participant => participant._id === user._id);
+                        })
+                        .map((user, index) => (
                         <div key={index}>
                             <ListItem button
                                       selected={selectedIndex === index}

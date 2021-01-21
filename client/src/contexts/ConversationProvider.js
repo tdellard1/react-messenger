@@ -20,7 +20,6 @@ export function ConversationProvider({children}) {
 
     // Adds message to the conversation through the server and then updates conversation when successful.
     useEffect(() => {
-        console.log('useEffect for sendMessage');
         if (sendMessage === "") return;
 
         const requestOptions = {
