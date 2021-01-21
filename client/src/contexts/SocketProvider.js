@@ -10,24 +10,23 @@ export function useSocket() {
 
 export function SocketProvider({children}) {
     const {authentication} = useAuthorization();
-
     const [socket, setSocket] = useState({});
 
     useEffect(() => {
-        let newSocket;
-
-        if (authentication && authentication.token) {
-            newSocket = io(`http://localhost:3001`,
-                { auth: {token: authentication.token}
-                });
-        } else {
-            newSocket = io('http://localhost:3001');
+        if (!authentication) {
+            if (socket.connected) socket.close(); return;
         }
 
+        const newSocket = io('http://localhost:3001', {
+            auth: {token: authentication.token}
+        });
+
         newSocket.on('connect', () => {
+            console.log('Socket IO connected from client.');
             setSocket(newSocket);
         });
-    }, []);
+        // eslint-disable-next-line
+    }, [authentication]);
 
     return (
         <SocketContext.Provider value={{socket}}>

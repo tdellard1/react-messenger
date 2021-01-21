@@ -1,9 +1,19 @@
 const socketEvents = require('./socket-controller');
+const User = require('../../models/User');
+const jwt = require('jsonwebtoken');
 
 let connection = null;
 
 class Socket {
-    constructor() {
+    constructor() {}
+
+    async authenticate(socket) {
+        const {token} = socket.handshake.auth;
+        const {id} = jwt.decode(token, "SECRET");
+
+        const user = await User.findOne({_id: id}).exec();
+        console.log('user: ', user);
+        return !!user;
     }
 
     connect(server) {
@@ -15,7 +25,12 @@ class Socket {
         });
 
         io.on('connection', async (socket) => {
-            socketEvents.forEach(event => event(socket));
+            const authenticated = await this.authenticate(socket);
+            if (authenticated) {
+                socketEvents.forEach(event => event(socket));
+            } else {
+                // disconnect socket
+            }
         });
     }
 
