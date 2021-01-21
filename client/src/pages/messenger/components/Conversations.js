@@ -8,12 +8,12 @@ import NewConversationModal from "./NewConversationModal";
 import {getOneConversation} from "../services/getOneConversation";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import UserPanel from "./conversations/UserPanel";
-import {useSocket} from "../../../contexts/SocketProvider";
 
 const useStyles = makeStyles({
     conversations: {
         backgroundColor: "#F5F7FB",
-        padding: "0 2rem"
+        padding: "0 2rem",
+        width: "33%"
     },
     searchField: {
         backgroundColor: "#E8EEFA"
@@ -52,7 +52,7 @@ export default function Conversations() {
                            )
                        }}/>
             <div className={classes.listItem}>
-                {Array.isArray(conversations) && conversations.map(conversation => (
+                {conversations && conversations.map(conversation => (
                     <ConversationListItem key={conversation._id}
                                           conversation={conversation}
                                           getConversation={() => getConversation(conversation)}/>

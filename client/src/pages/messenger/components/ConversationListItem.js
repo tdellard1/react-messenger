@@ -25,13 +25,15 @@ const useStyles = makeStyles({
         width: "50px",
         height: "50px",
         borderRadius: "50%",
-        margin: "1rem",
+        paddingRight: "1rem",
         zIndex: 1
     },
     details: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        width: "100%",
+        marginRight: "1rem"
     },
     bold: {
         fontWeight: 600
@@ -42,6 +44,7 @@ const useStyles = makeStyles({
     },
     card: {
         marginBottom: ".5rem",
+        padding: "1rem 0 1rem 1rem"
     }
 });
 
@@ -67,8 +70,9 @@ export default function ConversationListItem({conversation, getConversation}) {
             <div className={classes.conversationListItem} onClick={getConversation}>
                 <img src={stockImages[randomNumber()]} alt="stockImage" className={classes.avatar}/>
                 <div className={classes.details}>
-                    <Receiver />
-                    <span className={classes.light}>{conversation.lastMessage && conversation.lastMessage.content}</span>
+                    <Receiver/>
+                    <span
+                        className={classes.light}>{conversation.lastMessage && conversation.lastMessage.content}</span>
                 </div>
             </div>
         </Card>

@@ -10,7 +10,14 @@ const joinConversationRooms = (socket) => {
     });
 };
 
+const reloadConversations = (socket) => {
+    socket.on('reload-conversations', (id) => {
+        socket.to(id).emit('update-conversations');
+    })
+}
+
 module.exports = [
     messageSent,
+    reloadConversations,
     joinConversationRooms
 ]

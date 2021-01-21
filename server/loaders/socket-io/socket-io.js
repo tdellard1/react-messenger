@@ -12,8 +12,10 @@ class Socket {
         const {id} = jwt.decode(token, "SECRET");
 
         const user = await User.findOne({_id: id}).exec();
-        console.log('user: ', user);
-        return !!user;
+        return {
+            isValidUser: !!user,
+            id: id
+        };
     }
 
     connect(server) {
@@ -25,8 +27,9 @@ class Socket {
         });
 
         io.on('connection', async (socket) => {
-            const authenticated = await this.authenticate(socket);
-            if (authenticated) {
+            const {isValidUser, id} = await this.authenticate(socket);
+            if (isValidUser) {
+                socket.join(id);
                 socketEvents.forEach(event => event(socket));
             } else {
                 // disconnect socket

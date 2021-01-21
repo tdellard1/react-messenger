@@ -13,8 +13,10 @@ import {Button, TextField} from "@material-ui/core";
 import React, {useState} from "react";
 import {useAuthorization} from "../../../contexts/AuthorizationProvider";
 import {useConversations} from "../../../contexts/ConversationProvider";
+import {useSocket} from "../../../contexts/SocketProvider";
 
 export default function NewConversationModal() {
+    const {socket} = useSocket();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [firstMessage, setFirstMessage] = useState("");
     const {authentication, allUsers} = useAuthorization();
@@ -36,6 +38,7 @@ export default function NewConversationModal() {
             fetch('conversations', requestOptions)
                 .then(r => r.json())
                 .then(response => {
+                    socket.emit('reload-conversations', allUsers[selectedIndex]._id);
                     setSelectedConversation(response.conversation);
                     fetchAllConversations();
                     closeModal();

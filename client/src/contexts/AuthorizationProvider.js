@@ -16,6 +16,7 @@ export function AuthorizationProvider({children}) {
             localStorage.setItem('user', JSON.stringify(authentication));
         } else {
             localStorage.removeItem('user');
+            localStorage.removeItem('selectedConversation');
         }
     }, [authentication]);
 
